@@ -11,9 +11,15 @@ export default {
           '0%': { opacity: 0 },
           '100%': { opacity: 1 },
         },
+        spinner: {
+          to: {
+            transform: 'rotate(360deg)',
+          },
+        },
       },
       animation: {
         fadeInOut: 'fadeInOut .3s ease-in-out',
+        spinner: 'spinner 0.75s linear infinite',
       },
     },
   },

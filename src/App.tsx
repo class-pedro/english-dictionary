@@ -9,6 +9,7 @@ import { DictionaryDataRes } from "./types/types";
 import { MeaningCard } from "./components/MeaningCard";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { useTheme } from "./context/ThemeContext";
+import { Loader } from "./components/Loader";
 
 
 function App() {
@@ -16,15 +17,23 @@ function App() {
 
   const [word, setWord] = useState<string>("")
   const [dictionaryData, setDictionaryData] = useState<DictionaryDataRes[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFetch = async (word: string) => {
+    setIsLoading(true);
+
     try {
       const res = await fetchDictionaryData(word);
 
       if (res) {
         setDictionaryData(res);
         setWord("");
+        setIsLoading(false);
+
+        return;
       }
+
+      setIsLoading(false);
 
     } catch (error) {
       console.log(error)
@@ -34,8 +43,6 @@ function App() {
   useEffect(() => {
     handleFetch("welcome");
   }, [])
-
-  // font-serif font-sans font-mono
 
   return (
     <main className={`${theme.main_bg} min-h-[100vh] flex flex-col items-center font-serif`}>
@@ -91,15 +98,21 @@ function App() {
           </button>
         </div>
       </section>
-      <section className={`w-[75%] max-w-[700px] mt-5 mb-5 pb-3 border-solid border-b-[1px]`}>
-        {dictionaryData.length > 0 && dictionaryData[0].meanings.map((meaning, index) => (
-          <MeaningCard
-            key={index}
-            meaning={meaning}
-          />)
-        )}
-      </section>
-      {dictionaryData.length > 0 && dictionaryData[0].sourceUrls.length > 0 && (
+      {/* Loader */}
+      {isLoading && (
+        <Loader />
+      )}
+      {!isLoading && (
+        <section className={`w-[75%] max-w-[700px] mt-5 mb-5 pb-3 border-solid border-b-[1px]`}>
+          {dictionaryData.length > 0 && dictionaryData[0].meanings.map((meaning, index) => (
+            <MeaningCard
+              key={index}
+              meaning={meaning}
+            />)
+          )}
+        </section>
+      )}
+      {dictionaryData.length > 0 && dictionaryData[0].sourceUrls.length > 0 && !isLoading && (
         <section className={`w-[75%] max-w-[700px] pb-20 flex flex-row items-center gap-3`}>
           <span className={`text-lg font-extralight ${theme.meaning_text}`}>
             Source
@@ -116,8 +129,6 @@ function App() {
           </a>
         </section>
       )}
-
-
     </main>
   )
 }
