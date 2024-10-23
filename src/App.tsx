@@ -8,17 +8,14 @@ import { FaPlay } from "react-icons/fa";
 import { DictionaryDataRes } from "./types/types";
 import { MeaningCard } from "./components/MeaningCard";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import { useTheme } from "./context/ThemeContext";
 
 
 function App() {
+  const { isLight, theme, toggleTheme } = useTheme();
 
-  const [isLight, setIsLight] = useState<boolean>(true);
   const [word, setWord] = useState<string>("")
   const [dictionaryData, setDictionaryData] = useState<DictionaryDataRes[]>([]);
-
-  function toggleTheme() {
-    setIsLight(prev => !prev);
-  }
 
   const handleFetch = async (word: string) => {
     try {
@@ -38,25 +35,7 @@ function App() {
     handleFetch("welcome");
   }, [])
 
-  const theme = isLight ?
-    {
-      main_bg: 'bg-gray-50',
-      sec_bg: 'bg-gray-200',
-      text_sec: 'text-gray-300',
-      text_terc: 'text-gray-500',
-      text_bw: 'text-black',
-      meaning_text: 'text-gray-600',
-      hover_play_btn: 'hover:shadow-blue-200 hover:border-solid hover:border-1 hover:border-blue-100'
-    } :
-    {
-      main_bg: 'bg-gray-900',
-      sec_bg: 'bg-gray-800',
-      text_sec: 'text-gray-700',
-      text_terc: 'text-gray-400',
-      text_bw: 'text-gray-300',
-      hover_play_btn: 'hover:shadow-gray-800 hover:border-solid hover:border-1 hover:border-blue-900',
-      meaning_text: 'text-gray-300',
-    }
+  // font-serif font-sans font-mono
 
   return (
     <main className={`${theme.main_bg} min-h-[100vh] flex flex-col items-center font-serif`}>
@@ -65,9 +44,8 @@ function App() {
           size={32}
           className={`${theme.text_sec}`}
         />
-
         <div>
-          <button onClick={() => setIsLight(prev => !prev)}>
+          <button onClick={toggleTheme}>
             {
               isLight ? (
                 <FiMoon
@@ -86,7 +64,7 @@ function App() {
       </nav>
 
       <section className={`flex flex-col gap-4 w-[75%] max-w-[700px]`}>
-        <div className={`w-full ${theme.sec_bg} h-[60px] px-5 py-2 mb-4 rounded-md flex flex-row gap-2`}>
+        <div className={`w-full ${theme.sec_bg} h-12 md:h-[60px] px-5 py-2 mb-4 rounded-md flex flex-row gap-2`}>
           <input
             className={`${theme.sec_bg} ${theme.text_terc} font-medium text-xl w-full h-full outline-none placeholder:opacity-50`}
             type="text"
@@ -108,8 +86,7 @@ function App() {
           </div>
           <button className={`bg-blue-300 max-[500px]:w-[60px] max-[500px]:h-[60px] w-[80px] h-[80px] rounded-[50%] flex justify-center items-center hover:shadow-lg ${theme.hover_play_btn}`}>
             <FaPlay
-              size={32}
-              className={`text-blue-500 ms-1`}
+              className={`text-blue-500 ms-1 text-2xl md:text-3xl`}
             />
           </button>
         </div>
@@ -119,7 +96,6 @@ function App() {
           <MeaningCard
             key={index}
             meaning={meaning}
-            isLight={isLight}
           />)
         )}
       </section>
