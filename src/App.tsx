@@ -113,9 +113,9 @@ function App() {
         </section>
       )}
       {dictionaryData.length > 0 && dictionaryData[0].sourceUrls.length > 0 && !isLoading && (
-        <section className={`w-[75%] max-w-[700px] pb-20 flex flex-row items-center gap-3`}>
+        <section className={`w-[75%] max-w-[700px] pb-20 flex flex-col items-start sm:flex-row sm:items-center gap-1 sm:gap-3`}>
           <span className={`text-lg font-extralight ${theme.meaning_text}`}>
-            Source
+            Source:
           </span>
           <a
             className={`underline flex items-center gap-2 ${theme.text_bw}`}
